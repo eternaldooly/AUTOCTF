@@ -31,7 +31,7 @@ npm run build
 
    ```powershell
    New-VMSwitch -Name "WSLBridge" -SwitchType Internal
-   Get-NetAdapter             # vEthernet (WSLBridge) 생성 확인
+   Get-NetAdapter             # Verify vEthernet (WSLBridge) is created
    New-NetIPAddress -InterfaceAlias "vEthernet (WSLBridge)" -IPAddress 192.168.200.1 -PrefixLength 24
 
    Get-VMSwitch
@@ -102,7 +102,7 @@ args = [
 # MCP Servers: ida mcp server
 [mcp_servers.ida-mcp]
 command = "/AUTOCTF/run-mcp-proxy.sh"
-args = ["--debug", "http://192.168.35.105:8744/sse"] #change possible
+args = ["--debug", "http://192.168.35.105:8744/sse"] # Adjust IP/port as needed
 
 # Startup/Tool Execution timeouts
 startup_timeout_sec = 120.0
@@ -126,7 +126,6 @@ hide_gpt5_1_migration_prompt = true
 "hide_gpt-5.1-codex-max_migration_prompt" = true
 ```
 
-> 실제 경로(`$HOME`, `/home/<username>`, Volatility MCP 스크립트 위치 등)는 사용하는 계정/환경에 맞게 수정해서 사용하세요.
 > Update all paths (`$HOME`, `/home/<username>`, Volatility MCP script path, etc.) to match your actual setup.
 
 ## References

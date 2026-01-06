@@ -1,0 +1,114 @@
+[project]
+name = "mcp-proxy"
+description = "A MCP server which proxies requests to a remote MCP server over streamable HTTP or SSE."
+authors = [{ name = "Sergey Parfenyuk", email = "sergey.parfenyuk@gmail.com" }]
+license = { file = "LICENSE" }
+readme = "README.md"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Unix",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+version = "0.10.0"
+requires-python = ">=3.10"
+dependencies = ["httpx-auth>=0.22.0", "mcp>=1.17.0", "uvicorn>=0.34.0"]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project.urls]
+Homepage = "https://github.com/sparfenyuk/mcp-proxy"
+Source = "https://github.com/sparfenyuk/mcp-proxy"
+Documentation = "https://github.com/sparfenyuk/mcp-proxy"
+Changelog = "https://github.com/sparfenyuk/mcp-proxy/releases"
+
+[project.scripts]
+mcp-proxy = "mcp_proxy.__main__:main"
+mcp-reverse-proxy = "mcp_proxy.__main__:client"
+
+[tool.setuptools.package-data]
+"*" = ["py.typed"]
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=8.3.3",
+    "pytest-asyncio>=0.25.0",
+    "coverage>=7.6.0",
+    "mypy>=1.0.0",
+]
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+skip_covered = true
+show_missing = true
+precision = 2
+exclude_lines = [
+    'pragma: no cover',
+    'raise NotImplementedError',
+    'if TYPE_CHECKING:',
+    'if typing.TYPE_CHECKING:',
+    '@overload',
+    '@typing.overload',
+    '\(Protocol\):$',
+    'typing.assert_never',
+    '$\s*assert_never\(',
+    'if __name__ == .__main__.:',
+]
+
+[tool.mypy]
+allow_redefinition = false
+disallow_untyped_defs = true
+follow_imports = "normal"
+follow_untyped_imports = true
+no_implicit_optional = true
+show_error_code_links = true
+show_error_codes = true
+strict = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = true
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "EM101",  # Exception must not use a string literal, assign to variable first
+    "TRY003", # Avoid specifying long messages outside the exception class
+    "ERA001", # Found commented-out code
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101", "INP001"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff]
+line-length = 100
+
+[tool.pytest.ini_options]
+pythonpath = "src"
+addopts = ["--import-mode=importlib"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"

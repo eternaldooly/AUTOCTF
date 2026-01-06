@@ -53,6 +53,15 @@ Create it once on each new machine:
 ```bash
 mkdir -p /AUTOCTF/poc
 ```
+### mcp-proxy download 
+```
+cd mcp-proxy
+python3 -m venv .venv
+./.venv/bin/pip install -e .
+```
+
+### idalib-mcp download 
+https://github.com/mrexodia/ida-pro-mcp
 
 ### Codex `config.toml` example
 

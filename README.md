@@ -21,44 +21,17 @@ npm run build
 
 ## AUTOCTF Environment Notes
 
-### WSL2 bridge mode (Windows side)
-
-1. Add the following to `%UserProfile%\.wslconfig` (for example, `C:\Users\eternaldooly\.wslconfig`):
+### WSL2 mirrored mode (Windows side)
+Add the following to `%UserProfile%\.wslconfig` (for example, `C:\Users\eternaldooly\.wslconfig`):
 
    ```ini
-      [wsl2]
-      networkingMode=mirrored
-      
-      [experimental]
-      hostAddressLoopback=true
+   [wsl2]
+   networkingMode=mirrored
+   
+   [experimental]
+   hostAddressLoopback=true
    ```
 
-2. In an elevated (Administrator) PowerShell, create and configure the bridge switch and IP:
-
-   ```powershell
-   New-VMSwitch -Name "WSLBridge" -SwitchType Internal
-   Get-NetAdapter             # Verify vEthernet (WSLBridge) is created
-   New-NetIPAddress -InterfaceAlias "vEthernet (WSLBridge)" -IPAddress 192.168.200.1 -PrefixLength 24
-
-   Get-VMSwitch
-   Remove-VMSwitch -Name "WSLBridge" -Force
-   New-VMSwitch -Name "WSLBridge" -NetAdapterName "Ethernet" -AllowManagementOS $true
-   ```
-
-3. To disable or re-enable Hyper-V, use:
-
-   ```powershell
-   dism.exe /Online /Disable-Feature:Microsoft-Hyper-V
-   dism.exe /Online /Enable-Feature:Microsoft-Hyper-V /All
-   ```
-
-### WSL (Ubuntu, etc.) internal network configuration
-
-```bash
-sudo ip addr add 192.168.200.2/24 dev eth0
-sudo ip link set eth0 up
-sudo ip route add default via 192.168.200.1
-```
 
 This example assumes **Windows: 192.168.200.1 / WSL: 192.168.200.2**. Adjust the IP range and adapter names to match your own network.
 

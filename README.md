@@ -81,7 +81,7 @@ args = [
 # MCP Servers: ida mcp server
 [mcp_servers.ida-mcp]
 command = "/AUTOCTF/run-mcp-proxy.sh"
-args = ["--debug", "http://192.168.35.105:8744/sse"] # Adjust IP/port as needed
+args = ["--debug", "http://127.0.0.1:13337/sse"] # Adjust IP/port as needed
 
 # Startup/Tool Execution timeouts
 startup_timeout_sec = 120.0

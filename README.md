@@ -26,9 +26,11 @@ npm run build
 1. Add the following to `%UserProfile%\.wslconfig` (for example, `C:\Users\eternaldooly\.wslconfig`):
 
    ```ini
-   [wsl2]
-   networkingMode=bridged
-   vmSwitch=WSLBridge
+      [wsl2]
+      networkingMode=mirrored
+      
+      [experimental]
+      hostAddressLoopback=true
    ```
 
 2. In an elevated (Administrator) PowerShell, create and configure the bridge switch and IP:

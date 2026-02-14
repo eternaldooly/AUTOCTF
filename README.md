@@ -6,6 +6,8 @@ There is no separate external AI backend required: as long as Codex is installed
 
 Before running the project on a new machine, copy and adapt your `.env` file (Google OAuth IDs, DB path, IDA MCP paths/host/port, and category prompts) to match the local environment.
 
+> 📝 **Interested in the development journey?** Read the full story on my blog: [Building an AI CTF Solver Platform](https://dooly.life/post/building-ai-ctf-solver-platform/)
+
 ## Demo
 
 https://github.com/user-attachments/assets/468ad1f6-2852-4d1d-be7c-72e5ebe5e258

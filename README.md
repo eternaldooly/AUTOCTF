@@ -21,19 +21,69 @@ npm run build
 
 ## AUTOCTF Environment Notes
 
-### WSL2 mirrored mode (Windows side)
+### WSL2 Networking Setup (Windows side)
+
+#### Option A: Mirrored Mode (Simple, but currently broken)
+
 Add the following to `%UserProfile%\.wslconfig` (for example, `C:\Users\eternaldooly\.wslconfig`):
 
-   ```ini
-   [wsl2]
-   networkingMode=mirrored
-   
-   [experimental]
-   hostAddressLoopback=true
-   ```
+```ini
+[wsl2]
+networkingMode=mirrored
 
+[experimental]
+hostAddressLoopback=true
+```
 
-This example assumes **Windows: 192.168.200.1 / WSL: 192.168.200.2**. Adjust the IP range and adapter names to match your own network.
+> **Warning (as of 2026.02.14):** A Windows security update has introduced a bug that prevents mirrored mode from functioning correctly. If you experience network instability or connection failures, use the Bridge method below instead.
+
+#### Option B: Hyper-V Bridge (Recommended workaround)
+
+Since mirrored mode is currently unreliable, the Hyper-V Bridge approach is the recommended alternative.
+
+**1. Enable Hyper-V:**
+
+```powershell
+dism.exe /Online /Enable-Feature:Microsoft-Hyper-V /All
+```
+
+**2. Create an internal virtual switch:**
+
+```powershell
+New-VMSwitch -Name "WSLBridge" -SwitchType Internal
+```
+
+**3. Verify the new adapter was created:**
+
+```powershell
+Get-NetAdapter
+```
+
+You should see a new `vEthernet (WSLBridge)` adapter.
+
+**4. Assign a static IP to the bridge adapter:**
+
+```powershell
+New-NetIPAddress -InterfaceAlias "vEthernet (WSLBridge)" -IPAddress 192.168.200.1 -PrefixLength 24
+```
+
+**5. Bridge to your physical network adapter:**
+
+```powershell
+Get-VMSwitch
+Remove-VMSwitch -Name "WSLBridge" -Force
+New-VMSwitch -Name "WSLBridge" -NetAdapterName "Ethernet" -AllowManagementOS $true
+```
+
+**6. Configure networking inside WSL2:**
+
+```bash
+sudo ip addr add 192.168.200.2/24 dev eth0
+sudo ip link set eth0 up
+sudo ip route add default via 192.168.200.1
+```
+
+> **Important:** The IP addresses (`192.168.200.x`), adapter name (`"Ethernet"`), and other network values above are examples. Adjust them to match your environment. Additionally, since mirrored mode uses `127.0.0.1` but Bridge assigns a different IP, you must also update the IP addresses in your `.env` file (`IDA_MCP_HOST`), Codex `config.toml` (MCP server URLs), and any other config that references the host address.
 
 ### AUTOCTF script execution permissions
 
